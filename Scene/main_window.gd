@@ -11,7 +11,12 @@ var theJoke : String
 func _ready() -> void: #the initial settings
 	get_tree().root.set_transparent_background(true)
 	requestJoke()
-	sentences = ["天生万物以养人\n人无一物以报天", "杀杀杀杀杀", "我们都有光明的未来", "对对对", "错错错"]
+	sentences = [
+		"杀杀杀杀杀",
+		"我们都有光明的未来",
+		"对对对",
+		""
+		]
 	
 	
 func _unhandled_input(event:InputEvent) -> void: #quit method
@@ -25,8 +30,15 @@ func _on_character_chat() -> void: #chat method
 	
 
 func requestJoke() -> void:
-	joke_api.request("https://icanhazdadjoke.com/") #setting resource api
+	var headers = ["Accept: application/json"] #requiring return json format
+	joke_api.request("https://icanhazdadjoke.com/", headers) #setting resource api
 
 
 func _on_joke_api_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	var json := JSON.parse_string(body.get_string_from_utf8()) as Dictionary
+	theJoke = json.joke as String
+	sentences[3] = theJoke
+
+
+func _on_joke_request_timer_timeout() -> void:
+	requestJoke()

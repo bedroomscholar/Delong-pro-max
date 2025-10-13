@@ -41,3 +41,4 @@ grow_vertical = 2
 
 [connection signal="chat" from="Character" to="." method="_on_character_chat"]
 [connection signal="request_completed" from="JokeApi" to="." method="_on_joke_api_request_completed"]
+[connection signal="timeout" from="JokeApi/jokeRequestTimer" to="." method="_on_joke_request_timer_timeout"]
