@@ -28,7 +28,10 @@ var apis : Array[Dictionary] = [
 #the initial settings
 func _ready() -> void: 
 	get_tree().root.set_transparent_background(true)
-	chat_text.custom_minimum_size = Vector2(150, 200) # setting the minimize talking frame
+	chat_text.custom_minimum_size = Vector2(200, 200) # setting the minimize talking frame
+	
+	# enable redirect following for HTTPRequest
+	joke_api.set_max_redirects(5)
 	
 	sentences = [
 	"",
