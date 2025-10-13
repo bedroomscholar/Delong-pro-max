@@ -11,6 +11,10 @@ var theJoke : String
 func _ready() -> void: #the initial settings
 	get_tree().root.set_transparent_background(true)
 	requestJoke()
+	
+	chat_text.custom_minimum_size = Vector2(150, 200) # setting the minimize talking frame
+	
+	
 	sentences = [
 		"杀杀杀杀杀",
 		"我们都有光明的未来",
@@ -35,9 +39,12 @@ func requestJoke() -> void:
 
 
 func _on_joke_api_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
-	var json := JSON.parse_string(body.get_string_from_utf8()) as Dictionary
-	theJoke = json.joke as String
-	sentences[3] = theJoke
+	if response_code == 200:
+		var json := JSON.parse_string(body.get_string_from_utf8()) as Dictionary
+		if json != null and json.has("joke"):
+			theJoke = json.joke as String
+		
+		sentences[3] = theJoke
 
 
 func _on_joke_request_timer_timeout() -> void:
