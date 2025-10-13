@@ -17,7 +17,7 @@ metadata/_edit_horizontal_guides_ = [-1.0, 201.0]
 metadata/_edit_vertical_guides_ = [301.0, 178.0]
 
 [node name="Character" parent="." instance=ExtResource("1_wxieh")]
-position = Vector2(108, 94.00001)
+position = Vector2(84.99999, 97)
 rotation = -0.0058259666
 scale = Vector2(0.73488367, 0.73488367)
 
@@ -36,7 +36,7 @@ grow_vertical = 2
 [node name="JokeApi" type="HTTPRequest" parent="."]
 
 [node name="jokeRequestTimer" type="Timer" parent="JokeApi"]
-wait_time = 60.0
+wait_time = 120.0
 autostart = true
 
 [connection signal="chat" from="Character" to="." method="_on_character_chat"]
