@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://busxye1bkrslo"]
+
+[ext_resource type="Script" uid="uid://dsjp8dukk3jgr" path="res://Scene/main_window.gd" id="1_aurhl"]
+[ext_resource type="PackedScene" uid="uid://bbpukj7ku4nxu" path="res://Scene/character.tscn" id="1_wxieh"]
+[ext_resource type="PackedScene" uid="uid://dxdvohtskbigt" path="res://chat_text.tscn" id="3_jp3cc"]
+
+[node name="MainWindow" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_aurhl")
+metadata/_edit_horizontal_guides_ = [-1.0, 249.0]
+metadata/_edit_vertical_guides_ = [401.0]
+
+[node name="Character" parent="." instance=ExtResource("1_wxieh")]
+position = Vector2(108, 94.00001)
+rotation = -0.0058259666
+scale = Vector2(0.73488367, 0.73488367)
+
+[node name="ChatText" parent="." instance=ExtResource("3_jp3cc")]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -61.0
+offset_top = -12.0
+offset_right = -21.0
+offset_bottom = 13.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="JokeApi" type="HTTPRequest" parent="."]
+
+[node name="jokeRequestTimer" type="Timer" parent="JokeApi"]
+
+[connection signal="chat" from="Character" to="." method="_on_character_chat"]
+[connection signal="request_completed" from="JokeApi" to="." method="_on_joke_api_request_completed"]
