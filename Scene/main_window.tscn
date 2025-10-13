@@ -36,6 +36,8 @@ grow_vertical = 2
 [node name="JokeApi" type="HTTPRequest" parent="."]
 
 [node name="jokeRequestTimer" type="Timer" parent="JokeApi"]
+wait_time = 60.0
+autostart = true
 
 [connection signal="chat" from="Character" to="." method="_on_character_chat"]
 [connection signal="request_completed" from="JokeApi" to="." method="_on_joke_api_request_completed"]

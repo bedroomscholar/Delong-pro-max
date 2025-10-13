@@ -6,8 +6,8 @@ class_name Character
 signal chat
 
 func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if event is InputEventMouseMotion and event.button_mask == MOUSE_BUTTON_MASK_RIGHT :  # checking the mouse move.
-		get_tree().root.position += Vector2i(event.relative) # mapping the mouse location with 2ivector
+	##if event is InputEventMouseMotion and event.button_mask == MOUSE_BUTTON_MASK_RIGHT :  # checking the mouse move.
+		##get_tree().root.position += Vector2i(event.relative) # mapping the mouse location with 2ivector
 		
 	if event.is_action_pressed("ChatStart"):
 		chat.emit() #sending signal
