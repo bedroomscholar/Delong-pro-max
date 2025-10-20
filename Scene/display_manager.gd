@@ -17,6 +17,7 @@ var current_scale_factor: float = 1.0
 var target_scale_factor: float = 1.0
 var is_transitioning: bool = false
 var last_window_position: Vector2i = Vector2i.ZERO #follow the window position
+var is_window_dragging: bool = false #checking if the window was dragging
 
 #initialize
 func _ready() -> void:
@@ -28,10 +29,12 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	#detect changes in window position
-	var current_position := get_window().position
-	if current_position != last_window_position:
-		last_window_position = current_position
-		_check_screen_change()
+	#when window is dragging, stop check the screen changes
+	if not is_window_dragging:
+		var current_position := get_window().position
+		if current_position != last_window_position:
+			last_window_position = current_position
+			_check_screen_change()
 		
 	if enable_smooth_transition and is_transitioning:
 		current_scale_factor = lerp(current_scale_factor, target_scale_factor, delta * transition_speed)
@@ -100,6 +103,14 @@ func _apply_scale(scale: float) -> void:
 func force_refresh() -> void:
 	_detect_and_apply_dpi()
 
+func set_dragging_state(dragging: bool) -> void:
+	is_window_dragging = dragging
+	#after dragging, check the last location and setting scale
+	if not dragging:
+		await get_tree().process_frame
+		last_window_position = get_window().position
+		_check_screen_change()
+		
 func get_current_screen_info() -> Dictionary:
 	var screen_index := DisplayServer.window_get_current_screen(get_window().get_window_id())
 	return {

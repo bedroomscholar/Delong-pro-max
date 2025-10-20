@@ -8,6 +8,9 @@ extends Control
 var sentences : Array[String]  # array to store chat sentences
 var is_dragging : bool = false  # track if window is being dragged
 var current_api_index : int = 0  # current API index for rotation
+#drag states follower
+var drag_start_mouse_pos: Vector2i = Vector2i.ZERO
+var drag_start_window_pos: Vector2i = Vector2i.ZERO
 
 # fixed sentences that never change
 var fixed_sentences : Array[String] = [
@@ -133,16 +136,27 @@ func _on_joke_api_request_completed(result: int, response_code: int, headers: Pa
 	await get_tree().create_timer(0.3).timeout
 	request_next_item()
 
-# checking if right click, then select the whole window, then dragging
+# recording the initial location, checking if right click, then select the whole window, then dragging
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
-			is_dragging = event.pressed
+			if event.pressed:
+				is_dragging = true
+				drag_start_mouse_pos = DisplayServer.mouse_get_position()
+				drag_start_window_pos = get_tree().root.position
+			else:
+				is_dragging = false
+			# setting the dragging states, calling the display_manager
+			if display_manager:
+				display_manager.set_dragging_state(is_dragging)
 			get_viewport().set_input_as_handled() 
-	
-	if event is InputEventMouseMotion and is_dragging:
-		get_tree().root.position += Vector2i(event.relative)
-		get_viewport().set_input_as_handled()
+
+#apply drag
+func _process(delta: float) -> void:
+	if is_dragging:
+		var current_mouse_pos := DisplayServer.mouse_get_position()
+		var mouse_offset := current_mouse_pos - drag_start_mouse_pos
+		get_tree().root.position = drag_start_window_pos + mouse_offset
 
 # quit the game with Ctrl+Q
 func _unhandled_input(event:InputEvent) -> void:
