@@ -1,20 +1,20 @@
 
-# Delong pro max - accompany lapcat
-	this is the first time i tried to make a useable thing without overthingking, so i choosed to make a desktop pet.
-	delong is my cat, a diary cow cat.
-	i hope she can accompany your computer cat.
-	this cyber cat made by godot.
+# Delong pro max - desktop companion
+	this is the first time i tried to make a useable thing without overthinking, so i chose to make a desktop pet.
+	delong is my cat, a dairy cow cat.
+	i hope she can accompany you during your computer time.
+	this cyber cat is made with godot.
 	
 	## features:
 		### now:
 			- making jokes and useless facts
 		
 		### future:
-			- can count your every keyboard & click 
+			- can count every keystroke & click 
 			- chatting
 
 
-	## renew history
+	## version history
 	---
 	V0.1.2
 		- joke system
