@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://busxye1bkrslo"]
+[gd_scene load_steps=5 format=3 uid="uid://busxye1bkrslo"]
 
 [ext_resource type="Script" uid="uid://dsjp8dukk3jgr" path="res://Scene/main_window.gd" id="1_aurhl"]
 [ext_resource type="PackedScene" uid="uid://bbpukj7ku4nxu" path="res://Scene/character.tscn" id="1_wxieh"]
 [ext_resource type="PackedScene" uid="uid://dxdvohtskbigt" path="res://chat_text.tscn" id="3_jp3cc"]
+[ext_resource type="Script" uid="uid://b7sv0pwt1nwll" path="res://Scene/display_manager.gd" id="4_jj15r"]
 
 [node name="MainWindow" type="Control"]
 layout_mode = 3
@@ -13,11 +14,11 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_aurhl")
-metadata/_edit_horizontal_guides_ = [-1.0, 201.0]
-metadata/_edit_vertical_guides_ = [301.0, 178.0]
+metadata/_edit_horizontal_guides_ = [0.0, 302.0]
+metadata/_edit_vertical_guides_ = [301.0, 100.0]
 
 [node name="Character" parent="." instance=ExtResource("1_wxieh")]
-position = Vector2(84.99999, 97)
+position = Vector2(78.00001, 146)
 rotation = -0.0058259666
 scale = Vector2(0.73488367, 0.73488367)
 
@@ -27,7 +28,6 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 0
@@ -38,6 +38,9 @@ grow_vertical = 2
 [node name="jokeRequestTimer" type="Timer" parent="JokeApi"]
 wait_time = 120.0
 autostart = true
+
+[node name="DisplayManager" type="Node" parent="."]
+script = ExtResource("4_jj15r")
 
 [connection signal="chat" from="Character" to="." method="_on_character_chat"]
 [connection signal="request_completed" from="JokeApi" to="." method="_on_joke_api_request_completed"]

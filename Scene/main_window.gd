@@ -2,6 +2,7 @@ extends Control
 
 @onready var chat_text: ChatText = $ChatText
 @onready var joke_api: HTTPRequest = $JokeApi
+@onready var display_manager: DisplayManager = $DisplayManager
 
 var sentences : Array[String]  # array to store chat sentences
 var is_dragging : bool = false  # track if window is being dragged
@@ -38,7 +39,7 @@ var apis : Array[Dictionary] = [
 # initial settings when game starts
 func _ready() -> void: 
 	get_tree().root.set_transparent_background(true)
-	chat_text.custom_minimum_size = Vector2(200, 200)
+	chat_text.custom_minimum_size = Vector2(200, 300)
 	
 	# enable redirect following for HTTPRequest
 	joke_api.set_max_redirects(8)
@@ -48,6 +49,11 @@ func _ready() -> void:
 	
 	# start initial collection of jokes and facts
 	start_initial_collection()
+	
+	#DisplayManagement
+	if display_manager:
+		display_manager.dpi_changed.connect(_on_display_manager_dpi_changed)
+		print("connect to the DPI Manager")
 
 # combine fixed and dynamic sentences into one array
 func update_sentences_array() -> void:
@@ -108,10 +114,6 @@ func _on_joke_api_request_completed(result: int, response_code: int, headers: Pa
 		request_next_item()
 		return
 	
-	# limit text length
-	if content_text.length() > 120:
-		content_text = content_text.substr(0, 117) + "..."
-	
 	# save to dynamic sentences array
 	if api_type == "jokes":
 		dynamic_sentences[jokes_collected] = content_text
@@ -152,3 +154,11 @@ func _on_character_chat() -> void:
 # timer timeout - refresh all dynamic content every 3 minutes
 func _on_joke_request_timer_timeout() -> void:
 	start_initial_collection()
+	
+#DPI changing
+func _on_display_manager_dpi_changed(new_scale: float) -> void:
+	#setting the text scale
+	var base_font_size := 20
+	var new_font_size := int(base_font_size * new_scale)
+	chat_text.add_theme_font_size_override("font_size", new_font_size)
+	
