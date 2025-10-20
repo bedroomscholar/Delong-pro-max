@@ -18,6 +18,7 @@ var target_scale_factor: float = 1.0
 var is_transitioning: bool = false
 var last_window_position: Vector2i = Vector2i.ZERO #follow the window position
 var is_window_dragging: bool = false #checking if the window was dragging
+var is_sleeping: bool = false #sleeping state variable
 
 #initialize
 func _ready() -> void:
@@ -28,6 +29,10 @@ func _ready() -> void:
 	
 
 func _process(delta: float) -> void:
+	#if program is sleeping, then stop all the methods
+	if is_sleeping:
+		return
+	
 	#detect changes in window position
 	#when window is dragging, stop check the screen changes
 	if not is_window_dragging:
@@ -120,3 +125,10 @@ func get_current_screen_info() -> Dictionary:
 		"size": DisplayServer.screen_get_size(screen_index),
 		"position":DisplayServer.screen_get_position(screen_index)
 	}
+
+func set_sleep_mode(sleeping: bool) -> void:
+	is_sleeping = sleeping
+	if sleeping:
+		return
+	else:
+		_detect_and_apply_dpi()

@@ -18,7 +18,7 @@
 	---
 	V0.1.2.1
 		- Dpi management
-		
+		- add sleeping mode
 	---
 	V0.1.2
 		- joke system
