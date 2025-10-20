@@ -4,6 +4,7 @@ extends Control
 @onready var joke_api: HTTPRequest = $JokeApi
 @onready var display_manager: DisplayManager = $DisplayManager
 @onready var character: Node2D = $Character
+@onready var idle_detector: InputIdleDetector
 
 var sentences : Array[String]  # array to store chat sentences
 var is_dragging : bool = false  # track if window is being dragged
@@ -47,6 +48,13 @@ var base_character_scale: Vector2
 func _ready() -> void: 
 	get_tree().root.set_transparent_background(true)
 	chat_text.custom_minimum_size = Vector2(200, 300)
+	
+	# create Input Idle Detector
+	idle_detector = InputIdleDetector.new()
+	idle_detector.sleep_after_seconds = 300.0 # 5 min
+	idle_detector.sleep_mode_changed.connect(_on_sleep_mode_changed)
+	add_child(idle_detector)
+	print("connect to idle Detector")
 	
 	# enable redirect following for HTTPRequest
 	joke_api.set_max_redirects(8)
@@ -185,3 +193,17 @@ func _on_display_manager_dpi_changed(new_scale: float) -> void:
 	#setting the character scale
 	$Character.scale = Vector2(base_character_scale) * new_scale
 	
+#idle detector
+func _on_sleep_mode_changed(is_sleeping: bool) -> void:
+	if is_sleeping:
+		#stop all the event and go to sleep
+		$JokeApi/jokeRequestTimer.stop()
+		if display_manager:
+			display_manager.set_sleep_mode(true)
+		
+		print('in sleeping')
+	else:
+		#wake up
+		$JokeApi/jokeRequestTimer.start()
+		if display_manager:
+			display_manager.set_sleep_mode(false)
