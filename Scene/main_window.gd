@@ -5,6 +5,7 @@ extends Control
 @onready var display_manager: DisplayManager = $DisplayManager
 @onready var character: Node2D = $Character
 @onready var idle_detector: InputIdleDetector
+@onready var config_manager: ConfigManager
 
 var sentences : Array[String]  # array to store chat sentences
 var is_dragging : bool = false  # track if window is being dragged
@@ -49,6 +50,14 @@ func _ready() -> void:
 	get_tree().root.set_transparent_background(true)
 	chat_text.custom_minimum_size = Vector2(200, 300)
 	
+	# create and initialize config manager
+	config_manager = ConfigManager.new()
+	add_child(config_manager)
+	print("conncet to config manager")
+	
+	#restore the window position
+	_restore_window_position()
+	
 	# create Input Idle Detector
 	idle_detector = InputIdleDetector.new()
 	idle_detector.sleep_after_seconds = 300.0 # 5 min
@@ -72,7 +81,30 @@ func _ready() -> void:
 	if display_manager:
 		display_manager.dpi_changed.connect(_on_display_manager_dpi_changed)
 		print("connect to the DPI Manager")
+		
+	#ConfigManagement:
+	get_tree().root.close_requested.connect(_on_window_close_requested)
+	
+#restore the window's position
+func _restore_window_position() -> void:
+	#wait 1s for initialize
+	await get_tree().process_frame
+	
+	var saved_position = config_manager.get_safe_window_position()
+	#only use it when position is valid
+	if saved_position.x >= 0:
+		get_tree().root.position = saved_position
+		print("restore the position to %s" % saved_position)
+	else:
+		print("use the default position")
 
+#save the window setting when closed program
+func _on_window_close_requested() -> void:
+	var current_position = get_tree().root.position
+	config_manager.save_window_position(current_position)
+	print("saving")
+	get_tree().quit()
+	
 # combine fixed and dynamic sentences into one array
 func update_sentences_array() -> void:
 	sentences = dynamic_sentences + fixed_sentences
@@ -168,8 +200,9 @@ func _process(delta: float) -> void:
 
 # quit the game with Ctrl+Q
 func _unhandled_input(event:InputEvent) -> void:
+	#use close_request to trigger saving the setting
 	if event.is_action_pressed("QuitGame"):
-		get_tree().quit()
+		get_tree().root.close_requested.emit()
 
 # chat method - show random sentence when character is clicked
 func _on_character_chat() -> void:
