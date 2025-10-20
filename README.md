@@ -16,6 +16,10 @@
 
 	## version history
 	---
+	V0.1.2.1
+		- Dpi management
+		
+	---
 	V0.1.2
 		- joke system
 	---

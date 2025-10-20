@@ -3,6 +3,7 @@ extends Control
 @onready var chat_text: ChatText = $ChatText
 @onready var joke_api: HTTPRequest = $JokeApi
 @onready var display_manager: DisplayManager = $DisplayManager
+@onready var character: Node2D = $Character
 
 var sentences : Array[String]  # array to store chat sentences
 var is_dragging : bool = false  # track if window is being dragged
@@ -36,6 +37,9 @@ var apis : Array[Dictionary] = [
 	}
 ]
 
+#save the basic scale standard
+var base_character_scale: Vector2
+
 # initial settings when game starts
 func _ready() -> void: 
 	get_tree().root.set_transparent_background(true)
@@ -49,6 +53,9 @@ func _ready() -> void:
 	
 	# start initial collection of jokes and facts
 	start_initial_collection()
+	
+	#reading the default scale of character
+	base_character_scale = character.scale
 	
 	#DisplayManagement
 	if display_manager:
@@ -161,4 +168,6 @@ func _on_display_manager_dpi_changed(new_scale: float) -> void:
 	var base_font_size := 20
 	var new_font_size := int(base_font_size * new_scale)
 	chat_text.add_theme_font_size_override("font_size", new_font_size)
+	#setting the character scale
+	$Character.scale = Vector2(base_character_scale) * new_scale
 	
