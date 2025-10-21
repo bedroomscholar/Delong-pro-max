@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://busxye1bkrslo"]
+[gd_scene load_steps=8 format=3 uid="uid://busxye1bkrslo"]
 
 [ext_resource type="Script" uid="uid://dsjp8dukk3jgr" path="res://Scene/main_window.gd" id="1_aurhl"]
 [ext_resource type="PackedScene" uid="uid://bbpukj7ku4nxu" path="res://Scene/character.tscn" id="1_wxieh"]
 [ext_resource type="PackedScene" uid="uid://dxdvohtskbigt" path="res://chat_text.tscn" id="3_jp3cc"]
 [ext_resource type="Script" uid="uid://b7sv0pwt1nwll" path="res://Scene/display_manager.gd" id="4_jj15r"]
+[ext_resource type="FontFile" uid="uid://bdannncve2thn" path="res://Assets/SmileySans-Oblique.ttf" id="4_xoxhi"]
+[ext_resource type="Script" uid="uid://dckkbmjfl32kg" path="res://Scene/stats_display.gd" id="5_exhqj"]
+[ext_resource type="Script" uid="uid://o7iyk74rgp4y" path="res://input_tracker.gd" id="7_exhqj"]
 
 [node name="MainWindow" type="Control"]
 layout_mode = 3
@@ -18,7 +21,7 @@ metadata/_edit_horizontal_guides_ = [0.0, 302.0]
 metadata/_edit_vertical_guides_ = [301.0, 100.0]
 
 [node name="Character" parent="." instance=ExtResource("1_wxieh")]
-position = Vector2(78.00001, 146)
+position = Vector2(72, 109)
 rotation = -0.0058259666
 scale = Vector2(0.73488367, 0.73488367)
 
@@ -28,10 +31,30 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
+offset_left = -181.0
+offset_top = 3.0
+offset_right = -1.0
+offset_bottom = -47.0
 grow_horizontal = 0
 grow_vertical = 2
+
+[node name="StatsDisplay" type="Label" parent="."]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 213.0
+offset_right = 207.0
+offset_bottom = 288.0
+mouse_filter = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("4_xoxhi")
+theme_override_font_sizes/font_size = 18
+text = "Delong has been with you for 0 minutes,
+You have inputed 0 characters"
+vertical_alignment = 1
+autowrap_mode = 2
+script = ExtResource("5_exhqj")
 
 [node name="JokeApi" type="HTTPRequest" parent="."]
 
@@ -41,6 +64,9 @@ autostart = true
 
 [node name="DisplayManager" type="Node" parent="."]
 script = ExtResource("4_jj15r")
+
+[node name="InputTracker" type="Node" parent="."]
+script = ExtResource("7_exhqj")
 
 [connection signal="chat" from="Character" to="." method="_on_character_chat"]
 [connection signal="request_completed" from="JokeApi" to="." method="_on_joke_api_request_completed"]

@@ -5,7 +5,7 @@ signal dpi_changed(new_scale: float)
 
 @export_group ("DPI Settings")
 @export var base_dpi: float = 96.0 #windows' dpi standard
-@export var base_window_size: Vector2i = Vector2i(300, 200) #base window's scale
+@export var base_window_size: Vector2i = Vector2i(300, 330) #base window's scale
 
 @export_group("Transition")
 @export var enable_smooth_transition: bool = true

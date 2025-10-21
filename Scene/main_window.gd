@@ -6,6 +6,8 @@ extends Control
 @onready var character: Node2D = $Character
 @onready var idle_detector: InputIdleDetector
 @onready var config_manager: ConfigManager
+@onready var input_tracker: InputTracker = $InputTracker
+@onready var stats_display: StatsDisplay = $StatsDisplay
 
 var sentences : Array[String]  # array to store chat sentences
 var is_dragging : bool = false  # track if window is being dragged
@@ -18,7 +20,7 @@ var drag_start_window_pos: Vector2i = Vector2i.ZERO
 var fixed_sentences : Array[String] = [
 	"对对对",
 	"No Niin",
-	"杀杀杀杀杀"
+	"您辛苦了"
 ]
 
 # dynamic content from APIs (8 slots: 4 jokes + 4 facts)
@@ -55,6 +57,20 @@ func _ready() -> void:
 	add_child(config_manager)
 	print("conncet to config manager")
 	
+	#InputTracker
+	if input_tracker:
+		input_tracker.set_config_manager(config_manager)
+		input_tracker.stats_updated.connect(_on_stats_updated)
+		print("initialized inputTracker")
+	else:
+		push_error("haven't found InputTracker")
+	
+	#StatsDisplay
+	if stats_display:
+		print("initialized statsDisplay")
+	else:
+		push_error("haven't found statsDisplay")
+	
 	#restore the window position
 	_restore_window_position()
 	
@@ -84,7 +100,7 @@ func _ready() -> void:
 		
 	#ConfigManagement:
 	get_tree().root.close_requested.connect(_on_window_close_requested)
-	
+
 #restore the window's position
 func _restore_window_position() -> void:
 	#wait 1s for initialize
@@ -97,14 +113,25 @@ func _restore_window_position() -> void:
 		print("restore the position to %s" % saved_position)
 	else:
 		print("use the default position")
+	
+	
 
 #save the window setting when closed program
 func _on_window_close_requested() -> void:
 	var current_position = get_tree().root.position
 	config_manager.save_window_position(current_position)
+	
+	if input_tracker:
+		input_tracker.save_on_exit()
+		
 	print("saving")
 	get_tree().quit()
-	
+
+#statistics update callback
+func _on_stats_updated(session_time: float, session_inputs: int, total_time: float, total_inputs: int) -> void:
+	if stats_display:
+		stats_display.update_stats(session_time, session_inputs, total_time, total_inputs)
+
 # combine fixed and dynamic sentences into one array
 func update_sentences_array() -> void:
 	sentences = dynamic_sentences + fixed_sentences
@@ -225,6 +252,11 @@ func _on_display_manager_dpi_changed(new_scale: float) -> void:
 	chat_text.add_theme_font_size_override("font_size", new_font_size)
 	#setting the character scale
 	$Character.scale = Vector2(base_character_scale) * new_scale
+	#setting the statsDisplay scale
+	if stats_display:
+		var stats_base_font_size := 18
+		var stats_new_font_size := int(stats_base_font_size * new_scale)
+		stats_display.add_theme_font_size_override("font_size", stats_new_font_size)
 	
 #idle detector
 func _on_sleep_mode_changed(is_sleeping: bool) -> void:
