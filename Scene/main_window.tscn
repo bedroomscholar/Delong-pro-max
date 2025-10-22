@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://dsjp8dukk3jgr" path="res://Scene/main_window.gd" id="1_aurhl"]
 [ext_resource type="PackedScene" uid="uid://bbpukj7ku4nxu" path="res://Scene/character.tscn" id="1_wxieh"]
-[ext_resource type="PackedScene" uid="uid://dxdvohtskbigt" path="res://chat_text.tscn" id="3_jp3cc"]
+[ext_resource type="PackedScene" uid="uid://dxdvohtskbigt" path="res://Scene/chat_text.tscn" id="3_jp3cc"]
 [ext_resource type="Script" uid="uid://b7sv0pwt1nwll" path="res://Scene/display_manager.gd" id="4_jj15r"]
 [ext_resource type="FontFile" uid="uid://bdannncve2thn" path="res://Assets/SmileySans-Oblique.ttf" id="4_xoxhi"]
 [ext_resource type="Script" uid="uid://dckkbmjfl32kg" path="res://Scene/stats_display.gd" id="5_exhqj"]
-[ext_resource type="Script" uid="uid://o7iyk74rgp4y" path="res://input_tracker.gd" id="7_exhqj"]
+[ext_resource type="Script" uid="uid://o7iyk74rgp4y" path="res://Scene/input_tracker.gd" id="7_exhqj"]
 
 [node name="MainWindow" type="Control"]
 layout_mode = 3
